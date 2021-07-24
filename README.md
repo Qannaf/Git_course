@@ -23,8 +23,16 @@
 1. [Le remisage](#5)
     1. [git stash](#5a)
     1. [Stash multiple](#5b)
-1. [](#6)
-    1. [](#)
+1. [Remote](#6)
+    1. [--bare](#6a)
+    1. [remote](#6b)
+    1. [push](#6c)
+    1. [fetch](#6d)
+    1. [pull](#6e)
+1. [Fork & Pull request](#7)
+    1. [Fork](#7a)
+    1. [Pull request](#7b)
+    1. [GitHub ou Bitbucket ?](#7c)
 
 
 <a name="1"></a>
@@ -178,9 +186,9 @@ git branch -d <span class="hljs-tag">&lt;<span class="hljs-name">branche</span>&
 <a name="3d"></a>
 <h3>Fast-Forward ?</h3>
 <p>Un Fast-forward, est utilisé quand il existe un chemin simple pour relier notre branche et la branche cible. En effet, si il n'y a pas eu de commit entre temps la fusion consiste à ajouter les commit de la branche cible à la suite du dernier commit de la branche courante. Voici un petit schéma issu de <a href="https://fr.atlassian.com/git/tutorials/using-branches/git-merge">atlassian.com</a> pour mieux comprendre de quoi il s'agit.</p>
-<img src="/uploads/2015/03/git-fast-forward.svg" width="555" height="629" alt="crédits atlassian.com">
+<img src="images/git-fast-forward.svg" width="555" height="629" alt="crédits atlassian.com">
 <p>En revanche un fast-forward n'est pas possible si les 2 branches évoluées en même temps. Git n'a alors pas d'autre choix que d'effectuer un <strong>3-way merge</strong> en effectuant un commit pour rattacher les 2 branches.</p>
-<img src="/uploads/2015/03/git-merge.svg" width="555" height="765" alt="crédits atlassian.com">
+<img src="images/git-merge.svg" width="555" height="765" alt="crédits atlassian.com">
 <p><strong>Fast-forward</strong> ou <strong>3-way merge</strong> ? Le choix d'une stratégie de fusion va dépendre du cas à traiter.<br>
 Dans le cas d'un bufix ou d'une petite feature on préfèrera utiliser un <strong>fast-forward</strong> afin de garder un historique linéaire.<br>
 En revanche pour l'intégration d'une nouvelle fonctionnalité importante avec beaucoup de commit on préfèrera utiliser un <strong>3-way-merge</strong> afin d'obtenir un historique plus organisé.</p>
@@ -200,20 +208,20 @@ En revanche pour l'intégration d'une nouvelle fonctionnalité importante avec b
 <a name="4b"></a>
 <h2>rebase</h2>
 <p>Comme son nom l'indique rebase permet de déplacer une branche et de changer son commit de départ (sa base). Un petit schéma pour mieux comprendre :</p>
-<img src="/uploads/2015/03/git-rebase.svg" width="555" height="377" alt="crédits atlassian.com">
+<img src="images/git-rebase.svg" width="555" height="377" alt="crédits atlassian.com">
 <p>Dans le principe c'est très simple, on déplace nos 2 commits. En revanche git va réécrire l'historique, supprimer nos anciens commits et recréer 2 nouveau commits à partir de la nouvelle base (comprendre par là que les commits changent d'ID)</p>
 <pre class="with-syntax"><code class="hljs cs">git rebase &lt;nouvelle-<span class="hljs-keyword">base</span>&gt;</code></pre>
 <p>Permet de changer la base de la branche courante pour la<code>&lt;nouvelle-base&gt;</code>.</p>
 <h3>Pourquoi Rebase ?</h3>
 <p>On peut se demander à quoi peut servir une telle opération. Le rebase va nous être utile pour forcer un fast-forward lors d'une fusion de branche. Reprenons le cas d'une branche que l'on souhaite fusionner :</p>
-<img src="/uploads/2015/03/git-branch.svg" width="555" height="264" alt="crédits atlassian.com">
+<img src="images/git-branch.svg" width="555" height="264" alt="crédits atlassian.com">
 <p>Le problème ici, c'est qu'un merge entrainera un <strong>3-way merge</strong> qui va générer un nouveau commit de fusion et qui rendra l'historique plus complexe à lire. Le rebase va alors nous permettre de se placer dans un cas propice à un <strong>fast-forward</strong>.</p>
 <pre class="with-syntax"><code class="hljs nginx"><span class="hljs-attribute">git</span> checkout feature <span class="hljs-comment"># On va sur la branche feature</span>
 git rebase master  <span class="hljs-comment"># Notre branche commencera au bout de master</span>
 git checkout master <span class="hljs-comment"># On retourne sur master</span>
 git merge feature <span class="hljs-comment"># On fusionne feature et master</span></code></pre>
 <p>Et pour ceux qui préfèrent les images.</p>
-<img src="/uploads/2015/03/git-rebase-merge.svg" width="555" height="823" alt="crédits atlassian.com">
+<img src="images/git-rebase-merge.svg" width="555" height="823" alt="crédits atlassian.com">
 <p>On voit ici qu'un rebase nous permet de garder un historique simple et linéraire qui sera plus simple à comprendre. </p>
 
 
@@ -272,4 +280,79 @@ git merge feature <span class="hljs-comment"># On fusionne feature et master</sp
 <p>Une autre bonne pratique est de nommer ses stashs</p>
 <pre class="with-syntax"><code class="language-bash hljs">git stash save <span class="hljs-string">"J'ai tout cassé"</span></code></pre>
 <p>Voilà ! Vous savez tout ce qu'il y a savoir sur le remisage sur Git. C'est une commande méconnue qui va vous permettre de vous sortir de pas mal de situations épineuses et qui vous permet d'éviter des commit "forcés". Si vous souhaitez avoir plus d'informations sur les possibilités de cette commande (l'ensemble des commandes disponibles, mais aussi leurs options) vous pouvez consulter <a href="https://git-scm.com/docs/git-stash">la documentation</a>. </p>
+            </div>
+
+<a name="6"></a>
+# Remote
+<div class="formatted">
+              <p>Utiliser un dépôt git en local c'est bien, mais le gros intérêt du versionning c'est de pouvoir travailler à distance mais aussi de collaborer à plusieurs.</p>
+
+<a name="6a"></a>
+<h2>--bare</h2>
+<p>Lorsque l'on fait un <code>git init</code> on a la possibilité d'ajouter le drapeau --bare. Cette option permet de préciser que ce dossier ne contiendra pas de dossier de travail mais seulement l'historique de notre projet. Ces dossiers --bare peuvent être utilisés comme dépôt distant. </p>
+<pre class="with-syntax"><code class="hljs properties"><span class="hljs-attr">cd</span> <span class="hljs-string">mon-remote</span>
+<span class="hljs-attr">git</span> <span class="hljs-string">init --bare</span></code></pre>
+<p>Avec git n'importe quoi peut servir de dépôt distant. On peut utiliser un dossier spécifique, un chemin ssh://, un service tiers comme bitbucket ou github. Je vous conseille de vous faire la main avec un dossier servant de remote dans un premier temps avant de vous lancer sur ces services qui introduisent de nouvelles notions.</p>
+
+<a name="6b"></a>
+<h2>remote</h2>
+<p>La commande <code>remote</code>vous permet de créer voir et supprimer des connexions. Il faut voir ces connexions comme de simples alias vers le véritable chemin du dépôt. Ces chemins étant beaucoup plus simple à taper et surtout à retenir !</p>
+<pre class="with-syntax"><code class="hljs cs">git remote <span class="hljs-meta"># Liste les dépôts distants</span>
+git remote -v <span class="hljs-meta"># Liste les dépôts distants et les chemins associés</span>
+git remote <span class="hljs-keyword">add</span> &lt;<span class="hljs-keyword">alias</span>&gt; &lt;chemin/url&gt; <span class="hljs-meta"># Ajoute un nouveau dépôt distant</span>
+git remote rm &lt;<span class="hljs-keyword">alias</span>&gt; <span class="hljs-meta"># Supprimé un dépôt distant</span>
+git remote rename &lt;old&gt; &lt;<span class="hljs-keyword">new</span>&gt;</code></pre>
+
+<a name="6c"></a>
+<h2>push</h2>
+<p>La commande push permet de transférer les commits locaux vers le dépôt distant.</p>
+<pre class="with-syntax"><code class="hljs xml">git push <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">branche</span>&gt;</span>
+git push <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</span> --all # Permet d'envoyer toutes les branches</code></pre>
+<p>La commande push permet d'envoyer tous les commits d'une ou plusieurs branche au dépôt distant. Git ne permet pas de push si le dépôt distant est en décalage (pas de fast-forward possible) et dans ce cas là vous pouvez utiliser le drapreau --force</p>
+<pre class="with-syntax"><code class="hljs lua">git push &lt;remote&gt; <span class="hljs-comment">--force </span></code></pre>
+<p>Ce drapeau doit être utilisé en dernier recours (normalement vous n'en aurez jamais besoin) car il va modifier l'historique distant et peu ainsi affecter tous les collaborateurs. Mais ça peut être utile en cas de problème, si par exemple vous envoyez un commit en oubliant de retirer une clef d'API ou une information sensible.</p>
+
+
+<a name="6d"></a><h2>fetch</h2>
+<p>La commande fetch permet d'importer les informations du dépôt distant. L'import se fait à travers des branches spéciales pour nous donner la possibiliter de comparer et si besoin fusionner manuellement.</p>
+<pre class="with-syntax"><code class="hljs xml">git fetch <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</span> # Récupère toutes les branches et tous les commits 
+git fetch <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">branche</span>&gt;</span></code></pre>
+<p>En général on peut sauter cette étape mais si on souhaite par exemple comparer notre branche master à celle disponible à distance un fetch est essentiel.</p>
+<pre class="with-syntax"><code class="hljs bash">git fetch origin master 
+git <span class="hljs-built_in">log</span> master..origin/master <span class="hljs-comment"># Permet de voir les commits entre ma branche master et celle du remote</span></code></pre>
+<p>Si les modifications me semble acceptable pour une fusion je peux alors fusionner manuellement</p>
+<pre class="with-syntax"><code class="hljs sql">git <span class="hljs-keyword">merge</span> origin/<span class="hljs-keyword">master</span></code></pre>
+
+<a name="6e"></a>
+<h2>pull</h2>
+<p>Récupérer les infos du remote avec un fetch puis un merge n'est pas forcément très "user-friendly". La commande pull permet de faire un <code>git fetch</code> suivi d'un <code>git merge</code> en une seule commande.</p>
+<pre class="with-syntax"><code class="hljs xml">git pull <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</span>
+git pull <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">branche</span>&gt;</span></code></pre>
+<p>Si votre dépôt local est en avance git fera alors un <strong>3-way merge</strong>. Si vous souhaitez éviter ça vous pouvez demander à git de faire un rebase automatiquement lors du pull.</p>
+<pre class="with-syntax"><code class="hljs lua">git pull <span class="hljs-comment">--rebase &lt;remote&gt; </span></code></pre>
+<p>Il est possible d'indiquer à git que l'on souhaite faire un rebase par défaut en modifiant dans la configuration <code>branch.autosetuprebase</code>.</p>
+<pre class="with-syntax"><code class="hljs lua">git <span class="hljs-built_in">config</span> <span class="hljs-comment">--global branch.autosetuprebase always</span></code></pre>
+<p>Cela permet d'éviter de "poluer" l'historique de multiples "merge origin/master".</p>
+            </div>
+
+
+<a name="7"></a>
+# Fork & Pull request
+<div class="formatted">
+              <p>Nous allons maintenant parler des services tiers <a href="https://bitbucket.org/">Bitbucket</a> et <a href="https://github.com/">GitHub</a> qui permettent d'héberger vos projets versionnés avec Git.</p>
+<a name="7a"></a>
+<h2>Fork</h2>
+<p>Un fork désigne une copie d'un dépôt. En effet, par défaut il n'est pas possible de faire de commit sur un dépôt qui ne nous appartient pas (heureusement sinon ça serait l'anarchie). Du coup, les services ont introduit cette notion de fork qui permet de se retrouver avec un dépôt sur lequelle on aura la permission d'écriture</p>
+
+<a name="7b"></a>
+<h2>Pull request</h2>
+<p>La notion de pull request va de paire avec le système de Fork. Une fois que l'on a travaillé sur notre fork on souhaite souvent proposer à l'auteur original nos modifications. On fera alors un <strong>pull request</strong> qui consiste tout simplement à demander à l'auteur original de <strong>merge</strong> nos modifications. Ce processus est géré de manière quasi automatique par GitHub et Bitbucket.</p>
+<a name="7c"></a>
+<h2>GitHub ou Bitbucket ?</h2>
+<p>Les 2 services proposent des fonctionnalités similaires et je ne me lancerais pas ici dans une comparaison profonde. Ceci étant dit :</p>
+<ul>
+<li>Si votre projet est open source, GitHub est plus adapté car il met mieux en avant le code et parceque, soyons franc, tout les devs ont un compte GitHub.</li>
+<li>Si votre projet est fermé, Bitbucket propose une tarification qui peut s'avérer plus intéréssante.</li>
+</ul>
+<p>Le mieux reste encore de tester les 2 services pour vous faire votre propre opinion.</p>
             </div>
