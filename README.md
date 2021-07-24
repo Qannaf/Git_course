@@ -33,6 +33,7 @@
     1. [Fork](#7a)
     1. [Pull request](#7b)
     1. [GitHub ou Bitbucket ?](#7c)
+1. [Nommer ses commits](#8)
 
 
 <a name="1"></a>
@@ -355,4 +356,40 @@ git pull <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</s
 <li>Si votre projet est fermé, Bitbucket propose une tarification qui peut s'avérer plus intéréssante.</li>
 </ul>
 <p>Le mieux reste encore de tester les 2 services pour vous faire votre propre opinion.</p>
+            </div>
+
+<a name="8"></a>
+# Nommer ses commits
+<div class="formatted">
+              <p>Nommer les choses n'est jamais facile et les commits de git n'échappent pas à la règle. Le problème d'un mauvais nommage est qu'il est ensuite difficile de retrouver un commit spécifique et il est donc important de trouver une convention particulière pour bien s'organiser.</p>
+<div class="ratio"><iframe src="//slides.com/jonathanboyer/deck-22/embed" width="576" height="420" scrolling="no" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe></div>
+<h2>Le format</h2>
+<pre class="with-syntax"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>(<span class="hljs-tag">&lt;<span class="hljs-name">portée</span>&gt;</span>): <span class="hljs-tag">&lt;<span class="hljs-name">sujet</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">description</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">footer</span>&gt;</span></code></pre>
+<ul>
+<li><strong>Type</strong> définit le type de commit
+<ul>
+<li><strong>build</strong>: Système de build (example : gulp, webpack, npm)</li>
+<li><strong>ci</strong>: Intégration continue (example scopes: Travis, Circle, BrowserStack, SauceLabs)</li>
+<li><strong>docs</strong>: Documentation</li>
+<li><strong>feat</strong>: Ajout d'une fonctionnalité</li>
+<li><strong>fix</strong>: Correction de bogue</li>
+<li><strong>perf</strong>: Amélioration des performances</li>
+<li><strong>refactor</strong>: Changement du code qui ne change rien au fonctionnement</li>
+<li><strong>style</strong>: Changement du style du code (sans changer la logique)</li>
+<li><strong>test</strong>: Modification des tests</li>
+</ul></li>
+<li><strong>Portée</strong> définit quelle partie de votre librairie / application est affectée par le commit (cette information est optionnelle)</li>
+<li><strong>Sujet</strong> contient une description succinte des changements
+<ul>
+<li>En utilisant l'impératif présent ("change", et non pas "changed" ou "changes")</li>
+<li>Sans majuscule au début</li>
+<li>Pas de "." à la fin de la description</li>
+</ul></li>
+<li><strong>Description</strong> permet de détailler plus en profondeur les motivations derrière le changement. Les règles sont les mêmes que pour la partie Sujet.</li>
+<li><strong>Footer</strong> contient les changements importants (Breaking Changes) et les références à des issues <a href="https://help.github.com/articles/closing-issues-using-keywords/">GitHub</a> / GitLab ou autre.</li>
+</ul>
             </div>
