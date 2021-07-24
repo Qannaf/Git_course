@@ -362,7 +362,7 @@ git pull <span class="hljs-tag">&lt;<span class="hljs-name">remote</span>&gt;</s
 # Nommer ses commits
 <div class="formatted">
               <p>Nommer les choses n'est jamais facile et les commits de git n'échappent pas à la règle. Le problème d'un mauvais nommage est qu'il est ensuite difficile de retrouver un commit spécifique et il est donc important de trouver une convention particulière pour bien s'organiser.</p>
-<div class="ratio"><iframe src="//slides.com/jonathanboyer/deck-22/embed" width="576" height="420" scrolling="no" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe></div>
+
 <h2>Le format</h2>
 <pre class="with-syntax"><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">type</span>&gt;</span>(<span class="hljs-tag">&lt;<span class="hljs-name">portée</span>&gt;</span>): <span class="hljs-tag">&lt;<span class="hljs-name">sujet</span>&gt;</span>
 
