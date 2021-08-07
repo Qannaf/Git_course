@@ -178,7 +178,7 @@ git branch -d <span class="hljs-tag">&lt;<span class="hljs-name">branche</span>&
 <span class="hljs-attr">git</span> <span class="hljs-string">branch &lt;branche&gt;</span>
 <span class="hljs-attr">git</span> <span class="hljs-string">checkout &lt;branche&gt;</span></code></pre>
 
-<a name="1c"></a>
+<a name="3c"></a>
 <h2>merge</h2>
 <p>Merge permet de ramener une branche sur une autre et ainsi de la fusionner. La fusion de 2 branche se fait toujours à partir de la branche principale.</p>
 <ul>
