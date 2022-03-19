@@ -11,4 +11,7 @@ git config --global alias.conf "diff --name-only --diff-filter=U"
 git config --global alias.dv 'difftool -t vimdiff -y'
 git config --global alias.log1 "log --graph --abbrev-commit --decorate --format=format:'%C(bold yellow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(blue)- %an%C(reset)%C(bold cyan)%d%C(reset)' --all"
 git config --global alias.log2 "log --graph --abbrev-commit --decorate --format=format:'%C(bold yellow)%h%C(reset) - %C(dim white)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold cyan)%d%C(reset)%n''          %C(white)%s%C(reset) %C(blue)- %an%C(reset)' --all"
+git config --global alias.unadd 'reset HEAD --'
+git config --global alias.unstage 'reset HEAD --'
+git config --global alias.uncommit 'reset --soft HEAD~1'
 echo "finished thank you"
